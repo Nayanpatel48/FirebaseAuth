@@ -20,6 +20,7 @@ const auth = getAuth(app);
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const signUpBtn = document.getElementById('signup-btn');
+const UiErrorMessage = document.getElementById('error-message');
 
 const signUpButtonPressed = async (e) => {
     e.preventDefault();
@@ -32,7 +33,27 @@ const signUpButtonPressed = async (e) => {
         console.log(userCredentials);
     } catch (error) {
         console.log(error.code);
+        UiErrorMessage.innerHTML = formateErrorMessage(error.code);
+        UiErrorMessage.classList.add('visible');
     }
 };
 
 signUpBtn.addEventListener('click', signUpButtonPressed);
+
+const formateErrorMessage = (errorCode) => {
+    let message = ""
+
+    if(errorCode === "auth/invalid-email" || errorCode === "auth/missing-email"){
+        message = "Please enter a valid email"
+    } else if(
+        errorCode === "auth/missing-password"  || 
+        errorCode === "auth/weak-password"      
+    ){
+        message= "password must be 6 characters long"
+    } else if(
+        errorCode === "auth/already-in-use"
+    ){
+        message= "email is already in use"
+    }
+    return message;
+}
