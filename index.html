@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication App Using Firebase</title>
+    <style>
+        section{
+            height: 100vh;
+            background-color: #ececec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .signup-form{
+            min-width: 300px;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+</head>
+<body>
+    <section>
+        <div class="ui segment grey signup-form">
+            <div class="ui form">
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="mail icon"></i>
+                            <input type="email" placeholder="Email"
+                            id="email">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" placeholder="Password"
+                            id="password">
+                        </div>
+                    </div>
+                    <button class="ui button green fluid" id="signup-btn">CREATE ACCOUNT</button>
+                </div>
+            </div>
+            <div class="ui message small">ALREADY HAVE AN ACCOUNT?<a>LOG IN</a></div>
+        </div>
+    </section>
+    <script src="app.js" type="module"></script>
+    <script src="firebase.js" type="module"></script>
+</body>
+</html>
