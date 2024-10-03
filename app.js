@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -29,8 +29,18 @@ const signUpFormView = document.getElementById("signup-form")
 const userProfileView = document.getElementById("user-profile")
 const UiUserEmail = document.getElementById("user-email")
 
-const logOutBtn = document.getElementById("logout-btn")
+const logOutBtn = document.getElementById("logout-btn");
 const loginForm = document.getElementById("login-form");
+
+const loginEmail = document.getElementById("login-email");
+const loginPassword = document.getElementById("login-password")
+const loginBtn = document.getElementById("login-btn")
+
+const loginErrorMessage = document.getElementById("login-error-message");
+const needAnAccountBtn = document.getElementById("need-an-account-btn");
+const haveAnAccountBtn = document.getElementById("havve-an-account-btn");
+
+
 onAuthStateChanged(auth, (user) => {
     console.log(user);
     if(user){
@@ -38,8 +48,7 @@ onAuthStateChanged(auth, (user) => {
         userProfileView.style.display = "block";
         UiUserEmail.innerHTML=user.email;
     } else {
-        //signUpFormView.style.display = "block";
-        loginForm.style.display = "block"
+        loginForm.style.display = "block";
         userProfileView.style.display = "none";
     }
     mainView.style.display = "none";
@@ -56,7 +65,7 @@ const signUpButtonPressed = async (e) => {
         console.log(userCredentials);
     } catch (error) {
         console.log(error.code);
-        UiErrorMessage.innerHTML = formateErrorMessage(error.code);
+        UiErrorMessage.innerHTML = formateErrorMessage(error.code, "signup");
         UiErrorMessage.classList.add('visible');
     }
 };
@@ -71,23 +80,65 @@ const logOutButtonPressed = async () => {
     }
 }
 
+const logInButtonPressed = async(e) => {
+    e.preventDefault();
+    try {
+        await signInWithEmailAndPassword(
+            auth,
+            loginEmail.value,
+            loginPassword.value
+        );        
+    } catch (error) {
+        console.log(error.code)
+        console.log(formateErrorMessage(error.code, "login"))
+        loginErrorMessage.innerHTML = formateErrorMessage(error.code, "login");
+        loginErrorMessage.classList.add("visible");
+    }
+}
+
+const needAnAccountBuutonPressed = () => {
+    loginForm.style.display = "none";
+    signUpFormView.style.display = "block"
+}
+const haveAnAccountButtonPressed = () => {
+    loginForm.style.display = "block";
+    signUpFormView.style.display = "none"
+}
+
+
 signUpBtn.addEventListener('click', signUpButtonPressed);
 logOutBtn.addEventListener('click', logOutButtonPressed);
+loginBtn.addEventListener('click', logInButtonPressed);
+needAnAccountBtn.addEventListener('click', needAnAccountBuutonPressed);
+haveAnAccountBtn.addEventListener("click", haveAnAccountButtonPressed)
 
-const formateErrorMessage = (errorCode) => {
+
+//handles sign up erros
+const formateErrorMessage = (errorCode, action) => {
     let message = ""
 
-    if(errorCode === "auth/invalid-email" || errorCode === "auth/missing-email"){
-        message = "Please enter a valid email"
-    } else if(
-        errorCode === "auth/missing-password"  || 
-        errorCode === "auth/weak-password"      
-    ){
-        message= "password must be 6 characters long"
-    } else if(
-        errorCode === "auth/already-in-use"
-    ){
-        message= "email is already in use"
+    if(action == "signup") {
+        if(errorCode === "auth/invalid-email" || errorCode === "auth/missing-email"){
+            message = "Please enter a valid email"
+        } else if(
+            errorCode === "auth/missing-password"  || 
+            errorCode === "auth/weak-password"      
+        ){
+            message= "password must be 6 characters long"
+        } else if(
+            errorCode === "auth/already-in-use"
+        ){
+            message= "email is already in use"
+        }
+    } else if( action == "login"){
+        if(errorCode == "auth/invalid-email" || 
+            errorCode == "auth/missing-password"
+        ){
+            message ="Email or password is incorrect"
+        } else if(errorCode == "auth/user-not-found"){
+            message ="Our system was unable to verify your email or password"
+        }
     }
+    
     return message;
 }

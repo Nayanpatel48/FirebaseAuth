@@ -17,6 +17,10 @@
             text-align: center;
             display: none;
         }
+        .login-form{
+            display: none;
+            text-align: center;
+        }
         #user-profile{
             display: none;
         }
@@ -28,34 +32,41 @@
         <section class="ui segment loading" id="loading">
 
         </section>
-        <!-- log in -->
-         <div class="ui segment" id="login-form">
+        <div class="ui segment">
+
+        </div>
+
+        <!-- SIGN IN FORM -->
+         <div class="ui segment login-form" id="login-form">
             <form class="ui form">
                 <div class="ui stacked segment">
+                    <!-- Error message -->
+                    <div class="ui error message" id="login-error-message"></div>
+                    
                     <!-- Email -->
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="mail icon">
 
                             </i>
-                            <input type="email" placeholder="email">
+                            <input type="email" placeholder="email" id="login-email">
                         </div>
                     </div>
                     <!-- Password -->
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="lock icon"></i>
-                            <input type="password" placeholder="Password">
+                            <input type="password" placeholder="Password" id="login-password">
                         </div>
                     </div>
-                    <button class="ui button blue fluid">
+                    <button class="ui button blue fluid" id="login-btn">
                         Log in
                     </button>
                 </div>
             </form>
             <div class="ui message small">
                 Need an account?
-                <a>Sign Up</a>
+                <a id="need-an-account-btn">Sign Up</a>
             </div>
          </div>
 
@@ -108,7 +119,7 @@
                     <button class="ui button green fluid" id="signup-btn">CREATE ACCOUNT</button>
                 </div>
             </div>
-            <div class="ui message small">ALREADY HAVE AN ACCOUNT?<a>LOG IN</a></div>
+            <div class="ui message small">ALREADY HAVE AN ACCOUNT?<a id="havve-an-account-btn">LOG IN</a></div>
         </div>
     </section>
     <script src="app.js" type="module"></script>
