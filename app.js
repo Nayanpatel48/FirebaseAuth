@@ -30,15 +30,16 @@ const userProfileView = document.getElementById("user-profile")
 const UiUserEmail = document.getElementById("user-email")
 
 const logOutBtn = document.getElementById("logout-btn")
-
+const loginForm = document.getElementById("login-form");
 onAuthStateChanged(auth, (user) => {
     console.log(user);
     if(user){
-        signUpFormView.style.display = "none";
+        loginForm.style.display = "none";
         userProfileView.style.display = "block";
         UiUserEmail.innerHTML=user.email;
     } else {
-        signUpFormView.style.display = "block";
+        //signUpFormView.style.display = "block";
+        loginForm.style.display = "block"
         userProfileView.style.display = "none";
     }
     mainView.style.display = "none";
