@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -18,13 +18,31 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 //DOM references
+const mainView = document.getElementById("loading");
+
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const signUpBtn = document.getElementById('signup-btn');
+
 const UiErrorMessage = document.getElementById('error-message');
 const signUpFormView = document.getElementById("signup-form")
 const userProfileView = document.getElementById("user-profile")
 const UiUserEmail = document.getElementById("user-email")
+
+const logOutBtn = document.getElementById("logout-btn")
+
+onAuthStateChanged(auth, (user) => {
+    console.log(user);
+    if(user){
+        signUpFormView.style.display = "none";
+        userProfileView.style.display = "block";
+        UiUserEmail.innerHTML=user.email;
+    } else {
+        signUpFormView.style.display = "block";
+        userProfileView.style.display = "none";
+    }
+    mainView.style.display = "none";
+});
 
 const signUpButtonPressed = async (e) => {
     e.preventDefault();
@@ -35,11 +53,6 @@ const signUpButtonPressed = async (e) => {
             password.value
         );
         console.log(userCredentials);
-
-        UiUserEmail.innerHTML=userCredentials.user.email;
-
-        signUpFormView.style.display = "none";
-        userProfileView.style.display = "block";
     } catch (error) {
         console.log(error.code);
         UiErrorMessage.innerHTML = formateErrorMessage(error.code);
@@ -47,7 +60,18 @@ const signUpButtonPressed = async (e) => {
     }
 };
 
+const logOutButtonPressed = async () => {
+    try {
+        await signOut(auth);
+        email.value = "";
+        password.value = "";
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 signUpBtn.addEventListener('click', signUpButtonPressed);
+logOutBtn.addEventListener('click', logOutButtonPressed);
 
 const formateErrorMessage = (errorCode) => {
     let message = ""

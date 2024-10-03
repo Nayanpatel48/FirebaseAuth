@@ -15,6 +15,7 @@
         .signup-form{
             min-width: 300px;
             text-align: center;
+            display: none;
         }
         #user-profile{
             display: none;
@@ -24,6 +25,9 @@
 </head>
 <body>
     <section>
+        <section class="ui segment loading" id="loading">
+
+        </section>
         <!-- log in -->
         <div class="ui segment" id="user-profile">
             <div class="ui card">
@@ -36,8 +40,9 @@
                     </div>
                 </div>
                 <div class="extra content">
-                    <button class="ui button red tiny">
-
+                    <button class="ui button red tiny"
+                    id="logout-btn">
+                        Log Out
                     </button>
                 </div>
             </div>
