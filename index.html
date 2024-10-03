@@ -16,12 +16,35 @@
             min-width: 300px;
             text-align: center;
         }
+        #user-profile{
+            display: none;
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
 </head>
 <body>
     <section>
-        <div class="ui segment grey signup-form">
+        <!-- log in -->
+        <div class="ui segment" id="user-profile">
+            <div class="ui card">
+                <div class="content">
+                    <div class="header">
+                        User Profile
+                    </div>
+                    <div class="meta" id="user-email">
+                        someemail@gmail.com
+                    </div>
+                </div>
+                <div class="extra content">
+                    <button class="ui button red tiny">
+
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup form -->
+        <div class="ui segment grey signup-form" id="signup-form">
             <div class="ui form">
                 <div class="ui stacked segment">
 
