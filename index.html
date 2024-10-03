@@ -24,16 +24,40 @@
         #user-profile{
             display: none;
         }
+        #email-verify{
+            /* display: none; */
+            width: 400px;
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
 </head>
 <body>
     <section>
+        <!-- EMAIL VERIFICATION -->
+        <div class="ui segment big" id="email-verify">
+            <div class="ui card fluid">
+                <div class="content">
+                    <div class="header">
+                        Verification Email Sent!
+                        <i class="icon check green"></i>
+                    </div>
+                    <div class="meta">
+                        We've sent an email for verification. Please click the link in the email & confirm.
+                    </div>
+                    <div class="extra content">
+                        <button class="ui button red big" id="resend-email-btn">
+                            Resend
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section class="ui segment loading" id="loading">
 
         </section>
-        <div class="ui segment">
 
+        
+        <div class="ui segment">
         </div>
 
         <!-- SIGN IN FORM -->

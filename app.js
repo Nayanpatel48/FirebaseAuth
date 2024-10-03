@@ -20,6 +20,8 @@ const auth = getAuth(app);
 //DOM references
 const mainView = document.getElementById("loading");
 
+const emailVerificationView = document.getElementById("email-verify");
+
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const signUpBtn = document.getElementById('signup-btn');
@@ -44,14 +46,28 @@ const haveAnAccountBtn = document.getElementById("havve-an-account-btn");
 onAuthStateChanged(auth, (user) => {
     console.log(user);
     if(user){
+
+        if(!user.emailVerified) {
+            userProfileView.style.display = "block";
+            emailVerificationView.display = "block";
+            console.log("A");
+        } else{
+            userProfileView.style.display = "block";
+            UiUserEmail.innerHTML=user.email;
+            emailVerificationView.style.display = "block";
+            console.log("B");
+        }
         loginForm.style.display = "none";
-        userProfileView.style.display = "block";
-        UiUserEmail.innerHTML=user.email;
+        signUpFormView.style.display= "none";
+        console.log("C");
+
     } else {
         loginForm.style.display = "block";
         userProfileView.style.display = "none";
+        console.log("D");
     }
     mainView.style.display = "none";
+    console.log("E");
 });
 
 const signUpButtonPressed = async (e) => {
