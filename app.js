@@ -1,5 +1,5 @@
 import { 
-    initializeApp 
+    initializeApp,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 
 import { 
@@ -11,8 +11,15 @@ import {
     sendEmailVerification, 
     sendPasswordResetEmail, 
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -29,6 +36,8 @@ const app = initializeApp(firebaseConfig);
 
 // Get Firebase Authentication instance
 const auth = getAuth(app);
+
+const db = getFirestore();
 
 //DOM references
 const mainView = document.getElementById("loading");
@@ -69,7 +78,11 @@ const resetPasswordMessage = document.getElementById("rp-message");
 
 const loginWithGoogleBtm = document.getElementById("login-with-google-btn");
 
-onAuthStateChanged(auth, (user) => {
+const name = document.getElementById("name");
+
+const phone = document.getElementById("phone");
+
+onAuthStateChanged(auth, async(user) => {
     console.log(user);
     if(user){
 
@@ -81,6 +94,20 @@ onAuthStateChanged(auth, (user) => {
             userProfileView.style.display = "block";
             UiUserEmail.innerHTML=user.email;
             emailVerificationView.style.display = "block";
+
+            const docRef = doc(db, "users", user.uid);
+
+            try {
+                
+                const docSnap = await getDoc(docRef);
+                console.log(docSnap.data());
+
+            } catch (error) {
+                
+                console.log(error.code)
+            
+            }
+
             console.log("B");
         }
         loginForm.style.display = "none";
@@ -106,6 +133,14 @@ const signUpButtonPressed = async (e) => {
         );
 
         await sendEmailVerification(userCredentials.user);
+
+        const docRef = doc(db, "users", userCredentials.user.uid);
+
+        await setDoc(docRef, {
+            name : name.value, 
+            phone : phone.value,
+            email : email.value
+        });
 
         console.log(userCredentials);
     } catch (error) {
