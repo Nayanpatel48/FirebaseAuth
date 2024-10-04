@@ -82,6 +82,14 @@ const name = document.getElementById("name");
 
 const phone = document.getElementById("phone");
 
+const updateName = document.getElementById("update-name");
+
+const updateEmail = document.getElementById("update-email");
+
+const updatePhone = document.getElementById("update-phone");
+
+const updateBtn = document.getElementById("update-btn");
+
 onAuthStateChanged(auth, async(user) => {
     console.log(user);
     if(user){
@@ -90,22 +98,25 @@ onAuthStateChanged(auth, async(user) => {
             userProfileView.style.display = "block";
             emailVerificationView.display = "block";
             console.log("A");
+
         } else{
             userProfileView.style.display = "block";
             UiUserEmail.innerHTML=user.email;
             emailVerificationView.style.display = "block";
 
-            const docRef = doc(db, "users", user.uid);
-
             try {
                 
+                const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 console.log(docSnap.data());
-
+                updateName.value = docSnap.data().name;
+                updatePhone.value = docSnap.data().phone;
+                updateEmail.value = docSnap.data().email;
+                
             } catch (error) {
                 
                 console.log(error.code)
-            
+                
             }
 
             console.log("B");
@@ -219,6 +230,30 @@ const resetPasswordBtnPressed = async (e) => {
     console.log(resetPasswordEmail.value)
 }
 
+const updateUserProfileButtonPressed = async(e) => {
+    e.preventDefault();
+
+    // console.log(updateName.value);
+    // console.log(updateEmail.value);
+    // console.log(updatePhone.value);
+
+    try {
+
+        const docRef = doc(db, "users", auth.currentUser.uid);
+
+        await setDoc(docRef, {
+            name : updateName.value,
+            phone : updatePhone.value,
+            email : updateEmail.value,
+        });
+    } catch (error) {
+        console.log(error.code)
+    }
+    
+
+
+}
+
 signUpBtn.addEventListener('click', signUpButtonPressed);
 logOutBtn.addEventListener('click', logOutButtonPressed);
 loginBtn.addEventListener('click', logInButtonPressed);
@@ -231,6 +266,8 @@ forgotPasswordBtn.addEventListener("click", forgotPasswordButtonPressed);
 resetPasswordBtn.addEventListener("click", resetPasswordBtnPressed);
 
 loginWithGoogleBtm.addEventListener("click", loginWithGoogleButtonPressed);
+
+updateBtn.addEventListener("click", updateUserProfileButtonPressed)
 
 //handles sign up erros
 const formateErrorMessage = (errorCode, action) => {
