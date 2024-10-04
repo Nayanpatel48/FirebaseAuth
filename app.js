@@ -10,6 +10,8 @@ import {
     signInWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
+    GoogleAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 // Your Firebase configuration
@@ -64,6 +66,8 @@ const resetPasswordBtn = document.getElementById("reset-password-btn");
 const resetPasswordEmail = document.getElementById("reset-password-email");
 
 const resetPasswordMessage = document.getElementById("rp-message");
+
+const loginWithGoogleBtm = document.getElementById("login-with-google-btn");
 
 onAuthStateChanged(auth, (user) => {
     console.log(user);
@@ -155,6 +159,16 @@ const forgotPasswordButtonPressed = () => {
     loginForm.style.display = "none";
 }
 
+const loginWithGoogleButtonPressed = async (e) => {
+    e.preventDefault();
+    const googleProvider = new GoogleAuthProvider();
+    try {
+        await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+        console.log(error.code)
+    }
+}
+
 const resetPasswordBtnPressed = async (e) => {
     e.preventDefault();
     try {
@@ -180,6 +194,8 @@ resendEmailBtn.addEventListener("click", resendButtonPressed);
 forgotPasswordBtn.addEventListener("click", forgotPasswordButtonPressed);
 
 resetPasswordBtn.addEventListener("click", resetPasswordBtnPressed);
+
+loginWithGoogleBtm.addEventListener("click", loginWithGoogleButtonPressed);
 
 //handles sign up erros
 const formateErrorMessage = (errorCode, action) => {
