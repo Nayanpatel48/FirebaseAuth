@@ -28,6 +28,14 @@
             /* display: none; */
             width: 400px;
         }
+        #forgot-password-btn{
+            font-size: 17px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #reset-password-form{
+            display: none;
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
 </head>
@@ -56,7 +64,22 @@
 
         </section>
 
-        
+        <!-- FORGOT PASSWORD -->
+        <div class="ui segment big" id="reset-password-form">
+            <h1>Reset Your Password</h1>
+            <p>Enter your email address to reset your password</p>
+            <div class="ui message hidden" id="rp-message"></div>
+            <form class="ui form big">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="mail icon"></i>
+                        <input type="email" placeholder="Email" id="reset-password-email">
+                    </div>
+                </div>
+                <button class="ui button red big" id="reset-password-btn">Reset Password</button>
+            </form>
+        </div>
+
         <div class="ui segment">
         </div>
 
@@ -86,6 +109,8 @@
                     <button class="ui button blue fluid" id="login-btn">
                         Log in
                     </button>
+                    <br/>
+                    <a id="forgot-password-btn">Forgot password</a>
                 </div>
             </form>
             <div class="ui message small">

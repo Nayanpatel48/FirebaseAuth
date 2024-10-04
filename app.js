@@ -1,5 +1,16 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { 
+    initializeApp 
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut, 
+    signInWithEmailAndPassword, 
+    sendEmailVerification, 
+    sendPasswordResetEmail, 
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -42,6 +53,17 @@ const loginErrorMessage = document.getElementById("login-error-message");
 const needAnAccountBtn = document.getElementById("need-an-account-btn");
 const haveAnAccountBtn = document.getElementById("havve-an-account-btn");
 
+const resendEmailBtn = document.getElementById("resend-email-btn");
+
+const resetPasswordForm = document.getElementById("reset-password-form");
+
+const forgotPasswordBtn = document.getElementById("forgot-password-btn");
+
+const resetPasswordBtn = document.getElementById("reset-password-btn");
+
+const resetPasswordEmail = document.getElementById("reset-password-email");
+
+const resetPasswordMessage = document.getElementById("rp-message");
 
 onAuthStateChanged(auth, (user) => {
     console.log(user);
@@ -78,6 +100,9 @@ const signUpButtonPressed = async (e) => {
             email.value,
             password.value
         );
+
+        await sendEmailVerification(userCredentials.user);
+
         console.log(userCredentials);
     } catch (error) {
         console.log(error.code);
@@ -114,20 +139,47 @@ const logInButtonPressed = async(e) => {
 
 const needAnAccountBuutonPressed = () => {
     loginForm.style.display = "none";
-    signUpFormView.style.display = "block"
+    signUpFormView.style.display = "block";
 }
 const haveAnAccountButtonPressed = () => {
     loginForm.style.display = "block";
-    signUpFormView.style.display = "none"
+    signUpFormView.style.display = "none";
+}
+const resendButtonPressed = async() => {
+    await sendEmailVerification(auth.currentUser);
 }
 
+const forgotPasswordButtonPressed = () => {
+    //hide login show reset pass form
+    resetPasswordForm.style.display = "block";
+    loginForm.style.display = "none";
+}
+
+const resetPasswordBtnPressed = async (e) => {
+    e.preventDefault();
+    try {
+        await sendPasswordResetEmail(auth, resetPasswordEmail.value);
+        resetPasswordMessage.innerHTML = `we've sent a link to reset your password to ${resetPasswordEmail.value}`;
+        resetPasswordMessage.classList.add("success");
+    } catch (error) {
+        console.log(error.code);
+        resetPasswordMessage.innerHTML = "Please provide a valid registration email."
+        resetPasswordMessage.classList.add("error");
+    }
+    resetPasswordMessage.classList.remove("hidden");
+    console.log(resetPasswordEmail.value)
+}
 
 signUpBtn.addEventListener('click', signUpButtonPressed);
 logOutBtn.addEventListener('click', logOutButtonPressed);
 loginBtn.addEventListener('click', logInButtonPressed);
 needAnAccountBtn.addEventListener('click', needAnAccountBuutonPressed);
 haveAnAccountBtn.addEventListener("click", haveAnAccountButtonPressed)
+resendEmailBtn.addEventListener("click", resendButtonPressed);
 
+forgotPasswordBtn.addEventListener("click", forgotPasswordButtonPressed);
+
+resetPasswordBtn.addEventListener("click", resetPasswordBtnPressed);
 
 //handles sign up erros
 const formateErrorMessage = (errorCode, action) => {
